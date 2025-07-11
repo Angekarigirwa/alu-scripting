@@ -5,13 +5,14 @@ Module to print the titles of the top ten hot posts for a given subreddit.
 
 import requests
 
+
 def top_ten(subreddit):
     """
     Prints the titles of the top ten hot posts for a given subreddit.
-    If subreddit is invalid, prints None.
+    Prints None if the subreddit is invalid or unavailable.
     """
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {'User-Agent': 'python:top_ten_script:v1.0 (by /u/yourusername)'}
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
@@ -19,8 +20,9 @@ def top_ten(subreddit):
             return
         json_data = response.json()
         posts = json_data.get('data', {}).get('children', [])
-        for i in range(min(10, len(posts))):
-            print(posts[i]['data']['title'])
+        for post in posts[:10]:
+            print(post['data']['title'])
     except Exception:
         print(None)
+
 
