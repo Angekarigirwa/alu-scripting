@@ -1,17 +1,22 @@
 #!/usr/bin/python3
-""" return top ten"""
+"""Return top ten posts from a given subreddit"""
 
 import requests
 
 
 def top_ten(subreddit):
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if not response.ok:
-        print(None)
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    headers = {'User-Agent': 'MyRedditApp/0.1'}
+    params = {'limit': 10}
+    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+
+    if response.status_code != 200:
+        print("None")
         return
-    json_data = response.json()
-    posts = json_data['data']['children']
-    for i in range(min(10, len(posts))):
-        print(posts[i]['data']['title'])
+
+    try:
+        posts = response.json().get('data', {}).get('children', [])
+        for post in posts:
+            print(post.get('data', {}).get('title'))
+    except Exception:
+        print("None")
