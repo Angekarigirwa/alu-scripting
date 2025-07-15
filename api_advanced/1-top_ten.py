@@ -12,4 +12,3 @@ def top_ten(subreddit):
     except Exception:
         pass
     print("OK")
-
